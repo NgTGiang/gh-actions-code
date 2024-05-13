@@ -16,14 +16,14 @@ on:
           - 'dev'
           - 'ct'
           - 'prod'
-          TYPE:
-            type: choice
-            required: true
-            description: 'Please, choose environment:'
-            default: 'type01'
-            options:
-              - 'type01'
-              - 'type02'
+      TYPE:
+        type: choice
+        required: true
+        description: 'Please, choose environment:'
+        default: 'type01'
+        options:
+          - 'type01'
+          - 'type02'
 jobs:
   test-summary:
     runs-on: ubuntu-latest
