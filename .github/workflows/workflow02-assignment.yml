@@ -67,6 +67,7 @@ jobs:
           node-version: '16.16'
 
       - name: Define Browser
+        id: setup_browser
         run: |
             case ${{ github.event.inputs.BROWSER }} in
             'Chrome')
@@ -84,7 +85,7 @@ jobs:
       - name: 2.4 Set up browser
         uses: actions/browser@v2
         with:
-          browser-type: ${{ github.event.inputs.browser-type }}
+          browser-type: ${{ steps.setup_browser.outputs.browser-type }}
 
       # - name: 2.4 Set up Chrome browser
       #   if: ${{ github.event.inputs.BROWSER}} == 'chrome'
