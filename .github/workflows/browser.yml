@@ -1,0 +1,36 @@
+name: Browser Actions Workflow
+on:
+  workflow_dispatch:
+    inputs:
+      browser-type:
+        description: 'The type of browser to set up'
+        required: true
+        default: 'chromium'
+        options: ['Chrome', 'Firefox', 'Edge']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up browser
+        run: |
+          case ${{ github.event.inputs.browser-type }} in
+          'Chrome')
+            browser_type='chromium'
+            ;;
+          'Firefox')
+            browser_type='firefox'
+            ;;
+          'Edge')
+            browser_type='webkit'
+            ;;
+          esac
+          echo "::set-output name=browser-type::$browser_type"
+        id: setup_browser
+
+      - name: Use browser
+        uses: actions/browser@v2
+        with:
+          browser-type: ${{ steps.setup_browser.outputs.browser-type }}
+          headless: true
+          start-url: https://example.com
