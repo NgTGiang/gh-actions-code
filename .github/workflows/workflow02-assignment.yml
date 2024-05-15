@@ -1,5 +1,8 @@
 name: 4. DEMO - Automation Test Workflow - UI Selenium JS
 on:
+  push:
+    branches: 
+      - 'test_workflow'
   workflow_dispatch:
     name: on-demand
     inputs:
