@@ -66,7 +66,9 @@ jobs:
           node-version: '16.16'
 
       - name: 2.4 Set up browser
-        uses: actions/setup-${{github.event.inputs.BROWSER}}@v3
+        run: echo "The browser is ${{github.event.inputs.BROWSER}}"
+
+        # uses: actions/setup-${{github.event.inputs.BROWSER}}@v3
 
       # - name: 2.5 Config .env file
       # - name: 2.6 Test run
