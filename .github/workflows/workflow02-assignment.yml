@@ -53,16 +53,16 @@ jobs:
       - name: 2.2 Convert input strings to lowercase
         id: toLowerCase
         run: | 
-          echo "toLowerCase_env=${github.event.inputs.ENV,,}" >>$GITHUB_OUTPUT
+          echo "toLowerCase_env=${UPPERCASE_ENV,,}" >>$GITHUB_OUTPUT
           echo "toLowerCase_test_type=${UPPERCASE_TEST_TYPE,,}" >>$GITHUB_OUTPUT
           echo "toUpperCase_browser=${LOWERCASE_BROWSER,,}" >>$GITHUB_OUTPUT
         env:
           UPPERCASE_ENV: ${{ github.event.inputs.ENV}}
           UPPERCASE_TEST_TYPE: ${{ github.event.inputs.TEST_TYPE}}
           LOWERCASE_BROWSER: ${{ github.event.inputs.BROWSER}}
-        run: echo "Return ENV " ${{steps.toLowerCase.outputs.toLowerCase_env}}
-        run: echo "Return TEST_TYPE " ${{steps.toLowerCase.outputs.toLowerCase_test_type}}
-        run: echo "Return BROWSER " ${{steps.toLowerCase.outputs.toUpperCase_browser}}
+        run: echo "Return ENV ${{steps.toLowerCase.outputs.toLowerCase_env}}"
+        run: echo "Return TEST_TYPE ${{steps.toLowerCase.outputs.toLowerCase_test_type}} "
+        run: echo "Return BROWSER ${{steps.toLowerCase.outputs.toUpperCase_browser}} "
 
       - name: 2.3 Set up Node JS
         uses: actions/setup-node@v3
@@ -71,9 +71,21 @@ jobs:
 
       - name: 2.4 Set up browser
         uses: browser-actions/setup-chrome@v1
-      - run: chrome --version
-        # run: echo "The browser is ${{github.event.inputs.BROWSER}}"
-        # uses: actions/setup-@v3
+      - run: |
+          if [ ${{ github.event.inputs.BROWSER}} == 'Chrome' ]; then
+            chrome --version
+          if [ ${{ github.event.inputs.BROWSER}} == 'Edge' ]; then
+            (Get-Item (Get-Command msedge).Source).VersionInfo.ProductVersion
+          if [ ${{ github.event.inputs.BROWSER}} == 'Firefox' ]; then
+            firefox --version
+
+      - name: Edge
+        uses: browser-actions/setup-edge@v1
+        run: (Get-Item (Get-Command msedge).Source).VersionInfo.ProductVersion
+
+      - name: Firefox
+        uses: browser-actions/setup-firefox@v1
+        run: firefox --version
 
       # - name: 2.5 Config .env file
       # - name: 2.6 Test run
