@@ -32,9 +32,9 @@ on:
         description: 'Please, choose browser:'
         default: 'Chrome'
         options:
-          - Chrome
-          - Firefox
-          - Edge
+          - chrome
+          - firefox
+          - edge
 jobs:
   test-summary:
     runs-on: ubuntu-latest
@@ -66,26 +66,32 @@ jobs:
         with:
           node-version: '16.16'
 
-      - name: Define Browser
+      - name: 2.4 Set up browser
         id: setup_browser
         run: |
             case ${{ github.event.inputs.BROWSER }} in
-            'Chrome')
+            'chrome')
               browser_type='chromium'
               ;;
-            'Firefox')
+            'firefox')
               browser_type='firefox'
               ;;
-            'Edge')
+            'edge')
               browser_type='webkit'
               ;;
             esac
             echo "::set-output name=browser-type::$browser_type"
 
-      - name: 2.4 Set up browser
-        uses: actions/browser@v2
-        with:
-          browser-type: ${{ steps.setup_browser.outputs.browser-type }}
+#      - name: 2.4 Set up browser
+#        uses: actions/browser@v2
+#        with:
+#          browser-type: ${{ steps.setup_browser.outputs.browser-type }}
+      - uses: browser-actions/setup-firefox@v1
+        if: ${{ steps.setup_browser.outputs.browser-type }} == 'firefox'
+      - uses: browser-actions/setup-chromium@v1
+        if: ${{ steps.setup_browser.outputs.browser-type }} == 'chromium'
+      - uses: browser-actions/setup-edge@v1
+        if: ${{ steps.setup_browser.outputs.browser-type }} == 'edge'
 
       # - name: 2.4 Set up Chrome browser
       #   if: ${{ github.event.inputs.BROWSER}} == 'chrome'
