@@ -60,9 +60,9 @@ jobs:
           UPPERCASE_ENV: ${{ github.event.inputs.ENV}}
           UPPERCASE_TEST_TYPE: ${{ github.event.inputs.TEST_TYPE}}
           LOWERCASE_BROWSER: ${{ github.event.inputs.BROWSER}}
-        run: echo ${{steps.toLowerCase.outputs.toLowerCase_env}}
-        run: echo ${{steps.toLowerCase.outputs.toLowerCase_test_type}}
-        run: echo ${{steps.toLowerCase.outputs.toUpperCase_browser}}
+        run: ${{steps.toLowerCase.outputs.toLowerCase_env}}
+        run: ${{steps.toLowerCase.outputs.toLowerCase_test_type}}
+        run: ${{steps.toLowerCase.outputs.toUpperCase_browser}}
 
       - name: 2.3 Set up Node JS
         uses: actions/setup-node@v3
