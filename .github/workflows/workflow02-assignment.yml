@@ -60,10 +60,10 @@ jobs:
           UPPERCASE_ENV: ${{ github.event.inputs.ENV}}
           UPPERCASE_TEST_TYPE: ${{ github.event.inputs.TEST_TYPE}}
           LOWERCASE_BROWSER: ${{ github.event.inputs.BROWSER}}
-      - run: |
-          ${{steps.toLowerCase.outputs.toLowerCase_env}}
-          ${{steps.toLowerCase.outputs.toLowerCase_test_type}}
-          ${{steps.toLowerCase.outputs.toUpperCase_browser}}
+      # - run: |
+      #     ${{steps.toLowerCase.outputs.toLowerCase_env}}
+      #     ${{steps.toLowerCase.outputs.toLowerCase_test_type}}
+      #     ${{steps.toLowerCase.outputs.toUpperCase_browser}}
 
       - name: 2.3 Set up Node JS
         uses: actions/setup-node@v3
@@ -71,7 +71,9 @@ jobs:
           node-version: '16.16'
 
       - name: 2.4 Set up browser
-        uses: browser-actions/setup-chrome@v1
+        env:
+          browser_name: ${{steps.toLowerCase.outputs.toUpperCase_browser}}
+        uses: browser-actions/setup-$browser_name@v1
       - run: |
           if [ ${{ github.event.inputs.BROWSER}} == 'Chrome' ]; then
             chrome --version
