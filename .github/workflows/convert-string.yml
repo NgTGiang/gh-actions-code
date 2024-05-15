@@ -1,0 +1,51 @@
+name: Convert string to lowercase/uppercase
+on:
+  push:
+    branches:
+      - 'analyze_workflow'
+  workflow_dispatch:
+    name: on-demand
+    inputs:
+      ENV:
+        type: choice
+        required: true
+        description: 'Please, choose environment:'
+        default: 'QA'
+        options:
+          - DEV
+          - QA
+          - CT
+          - PROD
+      TEST_TYPE:
+        type: choice
+        required: true
+        description: 'Please, choose test type:'
+        default: 'smoke'
+        options:
+          - smoke
+          - sanity
+          - regression
+      BROWSER:
+        type: choice
+        required: true
+        description: 'Please, choose browser:'
+        default: 'Chrome'
+        options:
+          - Chrome
+          - Firefox
+          - Edge
+
+jobs:
+  covert-string:
+    runs-on: ubuntu-latest
+    steps:
+      - id: toLowerCase
+        run: | 
+          echo "::set-output name=lowerCaseValue_var::${UPPERCASE_VAR,,}"
+          echo "::set-output name=lowerCaseValue_env::${UPPERCASE_ENV,,}"
+        env:
+          UPPERCASE_VAR: "MY NAME IS GIANG"
+          UPPERCASE_ENV: ${{ github.event.inputs.ENV}}
+
+      - run: echo ${{steps.toLowerCase.outputs.lowerCaseValue}}
+      

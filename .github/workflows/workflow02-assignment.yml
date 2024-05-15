@@ -3,6 +3,7 @@ on:
   push:
     branches: 
       - 'test_workflow'
+      - 'analyze_workflow'
   workflow_dispatch:
     name: on-demand
     inputs:
@@ -53,8 +54,11 @@ jobs:
         id: toLowerCase
         run: | 
           echo "::set-output name=lowerCase_env::${LOWERCASE_ENV,,}"
+          echo ${{steps.toLowerCase.outputs.lowerCase_env}}
           echo "::set-output name=lowerCase_test_type::${UPPERCASE_TEST_TYPE^^}"
-          echo "::set-output name=lowerCase_env::${LOWERCASE_BROWSER,,}"
+          echo ${{steps.toLowerCase.outputs.lowerCase_test_type}}
+          echo "::set-output name=lowerCase_browser::${LOWERCASE_BROWSER,,}"
+          echo ${{steps.toLowerCase.outputs.lowerCase_browser}}
         env:
           LOWERCASE_ENV: ${{github.event.inputs.ENV}}
           UPPERCASE_TEST_TYPE: ${{github.event.inputs.TEST_TYPE}}
@@ -66,9 +70,10 @@ jobs:
           node-version: '16.16'
 
       - name: 2.4 Set up browser
-        run: echo "The browser is ${{github.event.inputs.BROWSER}}"
-
-        # uses: actions/setup-${{github.event.inputs.BROWSER}}@v3
+        uses: browser-actions/setup-chrome@v1
+      - run: chrome --version
+        # run: echo "The browser is ${{github.event.inputs.BROWSER}}"
+        # uses: actions/setup-@v3
 
       # - name: 2.5 Config .env file
       # - name: 2.6 Test run
