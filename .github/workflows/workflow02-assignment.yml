@@ -68,6 +68,6 @@ jobs:
       - name: 2.4 Set up browser
         uses: actions/setup-${{github.event.inputs.BROWSER}}@v3
 
-      - name: 2.5 Config .env file
-      - name: 2.6 Test run
-      - name: 2.7 Upload report artifact
+      # - name: 2.5 Config .env file
+      # - name: 2.6 Test run
+      # - name: 2.7 Upload report artifact
