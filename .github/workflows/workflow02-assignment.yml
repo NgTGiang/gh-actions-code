@@ -60,30 +60,46 @@ jobs:
           UPPERCASE_ENV: ${{ github.event.inputs.ENV}}
           UPPERCASE_TEST_TYPE: ${{ github.event.inputs.TEST_TYPE}}
           LOWERCASE_BROWSER: ${{ github.event.inputs.BROWSER}}
-      # - run: |
-      #     ${{steps.toLowerCase.outputs.toLowerCase_env}}
-      #     ${{steps.toLowerCase.outputs.toLowerCase_test_type}}
-      #     ${{steps.toLowerCase.outputs.toUpperCase_browser}}
 
       - name: 2.3 Set up Node JS
         uses: actions/setup-node@v3
         with:
           node-version: '16.16'
 
-      - name: 2.4 Set up Chrome browser
-        if: ${{ github.event.inputs.BROWSER}} == 'chrome'
-        uses: browser-actions/setup-chrome@v1
-      - run: chrome --version
+      - name: Define Browser
+        run: |
+            case ${{ github.event.inputs.BROWSER }} in
+            'Chrome')
+              browser_type='chromium'
+              ;;
+            'Firefox')
+              browser_type='firefox'
+              ;;
+            'Edge')
+              browser_type='webkit'
+              ;;
+            esac
+            echo "::set-output name=browser-type::$browser_type"
 
-      - name: 2.4 Set up Edge browser
-        if: ${{ github.event.inputs.BROWSER}} == 'edge'
-        uses: browser-actions/setup-edge@v1
-      - run: (Get-Item (Get-Command msedge).Source).VersionInfo.ProductVersion
+      - name: 2.4 Set up browser
+        uses: actions/browser@v2
+        with:
+          browser-type: ${{ github.event.inputs.browser-type }}
 
-      - name: 2.4 Set up Firefox browser
-        if: ${{ github.event.inputs.BROWSER}} == 'firefox'
-        uses: browser-actions/setup-chrome@v1
-      - run: firefox --version
+      # - name: 2.4 Set up Chrome browser
+      #   if: ${{ github.event.inputs.BROWSER}} == 'chrome'
+      #     uses: browser-actions/setup-chrome@v1
+      #   - run: chrome --version
+
+      # - name: 2.4 Set up Edge browser
+      #   if: ${{ github.event.inputs.BROWSER}} == 'edge'
+      #     uses: browser-actions/setup-edge@v1
+      #   - run: edge --version
+
+      # - name: 2.4 Set up Firefox browser
+      #   if: ${{ github.event.inputs.BROWSER}} == 'firefox'
+      #     uses: browser-actions/setup-chrome@v1
+      #   - run: firefox --version
 
       # - run: |
       #     if [ ${{ github.event.inputs.BROWSER}} == 'Chrome' ]; then
