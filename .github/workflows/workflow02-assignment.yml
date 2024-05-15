@@ -1,0 +1,75 @@
+name: 4. DEMO - Automation Test Workflow - UI Selenium JS
+on:
+  push:
+    branches: 
+      - 'test_workflow'
+  workflow_dispatch:
+    name: on-demand
+    inputs:
+      ENV:
+        type: choice
+        required: true
+        description: 'Please, choose environment:'
+        default: 'QA'
+        options:
+          - DEV
+          - QA
+          - CT
+          - PROD
+      TEST_TYPE:
+        type: choice
+        required: true
+        description: 'Please, choose test type:'
+        default: 'smoke'
+        options:
+          - smoke
+          - sanity
+          - regression
+      BROWSER:
+        type: choice
+        required: true
+        description: 'Please, choose browser:'
+        default: 'Chrome'
+        options:
+          - Chrome
+          - Firefox
+          - Edge
+jobs:
+  test-summary:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Actor is ${{ github.actor }}"
+      - run: echo "Branch is ${{github.ref}}"
+      - run: echo "BDD tag is @${{github.event.inputs.TEST_TYPE}}_${{github.event.inputs.ENV}}"
+
+  regression-test:
+    runs-on: ubuntu-latest
+    needs: test-summary
+    steps:
+      - name: 2.1 Checkout code
+        uses: actions/checkout@v3
+
+      - name: 2.2 Convert input strings to lowercase
+        id: toLowerCase
+        run: | 
+          echo "::set-output name=lowerCase_env::${LOWERCASE_ENV,,}"
+          echo "::set-output name=lowerCase_test_type::${UPPERCASE_TEST_TYPE^^}"
+          echo "::set-output name=lowerCase_env::${LOWERCASE_BROWSER,,}"
+        env:
+          LOWERCASE_ENV: ${{github.event.inputs.ENV}}
+          UPPERCASE_TEST_TYPE: ${{github.event.inputs.TEST_TYPE}}
+          LOWERCASE_BROWSER: ${{github.event.inputs.BROWSER}}
+
+      - name: 2.3 Set up Node JS
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.16'
+
+      - name: 2.4 Set up browser
+        run: echo "The browser is ${{github.event.inputs.BROWSER}}"
+
+        # uses: actions/setup-${{github.event.inputs.BROWSER}}@v3
+
+      # - name: 2.5 Config .env file
+      # - name: 2.6 Test run
+      # - name: 2.7 Upload report artifact

@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - 'main'
-      - 'test_workflow'
   workflow_dispatch:
     inputs:
       ENV:
@@ -16,9 +15,17 @@ on:
           - 'dev'
           - 'ct'
           - 'prod'
-
+      TYPE:
+        type: choice
+        required: true
+        description: 'Please, choose environment:'
+        default: 'type01'
+        options:
+          - 'type01'
+          - 'type02'
 jobs:
   test-summary:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Get value from ${{github.event.inputs.ENV}}"
+      - run: echo "Get ENV value from ${{github.event.inputs.ENV}}"
+      - run: echo "Get TYPE value from ${{github.event.inputs.TYPE}}"
