@@ -73,7 +73,7 @@ jobs:
       - name: 2.4 Set up browser
         env:
           browser_name: ${{steps.toLowerCase.outputs.toUpperCase_browser}}
-        uses: browser-actions/setup-$browser_name@v1
+        uses: browser-actions/setup-${{browser_name}}@v1
       - run: |
           if [ ${{ github.event.inputs.BROWSER}} == 'Chrome' ]; then
             chrome --version
