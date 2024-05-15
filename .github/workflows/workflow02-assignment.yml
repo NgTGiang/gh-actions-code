@@ -67,7 +67,6 @@ jobs:
 
       - name: 2.4 Set up browser
         uses: actions/setup-${{github.event.inputs.BROWSER}}@v3
-        run: chrome --version
 
       - name: 2.5 Config .env file
       - name: 2.6 Test run
