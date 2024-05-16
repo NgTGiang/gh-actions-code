@@ -1,9 +1,5 @@
 name: 4. DEMO - Automation Test Workflow - UI Selenium JS
 on:
-  push:
-    branches: 
-      - 'test_workflow'
-      - 'analyze_workflow'
   workflow_dispatch:
     name: on-demand
     inputs:
@@ -70,8 +66,34 @@ jobs:
           node-version: '16.16'
 
       - name: 2.4 Set up browser
-        uses: browser-actions/setup-chrome@v1
-      - run: chrome --version
+        run: |
+          case ${{ github.event.inputs.browser-type }} in
+          'Chrome')
+            setup_action='actions/setup-chrome@v3'
+            ;;
+          'Firefox')
+            setup_action='actions/setup-firefox@v3'
+            ;;
+          'Edge')
+            setup_action='actions/setup-edge@v3'
+            ;;
+          esac
+          echo "::set-output name=setup-action::$setup_action"
+        id: setup_browser
+
+      - name: Set up Chrome
+        if: steps.setup_browser.outputs.setup-action == 'actions/setup-chrome@v3'
+        uses: actions/setup-chrome@v3
+
+      - name: Set up Firefox
+        if: steps.setup_browser.outputs.setup-action == 'actions/setup-firefox@v3'
+        uses: actions/setup-firefox@v3
+
+      - name: Set up Edge
+        if: steps.setup_browser.outputs.setup-action == 'actions/setup-edge@v3'
+        uses: actions/setup-edge@v3
+#        uses: browser-actions/setup-chrome@v1
+#      - run: chrome --version
         # run: echo "The browser is ${{github.event.inputs.BROWSER}}"
         # uses: actions/setup-@v3
 
