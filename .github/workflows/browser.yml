@@ -5,7 +5,7 @@ on:
       browser-type:
         description: 'The type of browser to set up'
         required: true
-        default: 'chromium'
+        default: 'Chrome'
         options: ['Chrome', 'Firefox', 'Edge']
 
 jobs:
@@ -17,19 +17,24 @@ jobs:
           case ${{ github.event.inputs.browser-type }} in
           'Chrome')
             browser_type='chromium'
+            setup_action='actions/setup-chrome@v3'
             ;;
           'Firefox')
             browser_type='firefox'
+            setup_action='actions/setup-firefox@v3'
             ;;
           'Edge')
             browser_type='webkit'
+            setup_action='actions/setup-edge@v3'
             ;;
           esac
           echo "::set-output name=browser-type::$browser_type"
+          echo "::set-output name=setup-action::$setup_action"
         id: setup_browser
 
-      - name: Use custom browser action
-        uses: my-org/my-custom-action@v1
+      - name: Use browser
+        uses: ${{ steps.setup_browser.outputs.setup-action }}
         with:
-          browser-type: ${{ steps.setup_browser.outputs.browser-type }}
-          other-input: 'value'
+          version: 'latest'
+          headless: true
+          start-url: https://example.com
