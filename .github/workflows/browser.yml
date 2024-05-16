@@ -16,25 +16,26 @@ jobs:
         run: |
           case ${{ github.event.inputs.browser-type }} in
           'Chrome')
-            browser_type='chromium'
             setup_action='actions/setup-chrome@v3'
             ;;
           'Firefox')
-            browser_type='firefox'
             setup_action='actions/setup-firefox@v3'
             ;;
           'Edge')
-            browser_type='webkit'
             setup_action='actions/setup-edge@v3'
             ;;
           esac
-          echo "::set-output name=browser-type::$browser_type"
           echo "::set-output name=setup-action::$setup_action"
         id: setup_browser
 
       - name: Use browser
-        uses: ${{ steps.setup_browser.outputs.setup-action }}
-        with:
-          version: 'latest'
-          headless: true
-          start-url: https://example.com
+        if: steps.setup_browser.outputs.setup-action == 'actions/setup-chrome@v3'
+        uses: actions/setup-chrome@v3
+
+      - name: Use browser
+        if: steps.setup_browser.outputs.setup-action == 'actions/setup-firefox@v3'
+        uses: actions/setup-firefox@v3
+
+      - name: Use browser
+        if: steps.setup_browser.outputs.setup-action == 'actions/setup-edge@v3'
+        uses: actions/setup-edge@v3
