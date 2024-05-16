@@ -30,12 +30,12 @@ jobs:
 
       - name: Use browser
         if: steps.setup_browser.outputs.setup-action == 'actions/setup-chrome@v3'
-        uses: actions/setup-chrome@v3
+        uses: browser-actions/setup-chrome@v3
 
       - name: Use browser
         if: steps.setup_browser.outputs.setup-action == 'actions/setup-firefox@v3'
-        uses: actions/setup-firefox@v3
+        uses: browser-actions/setup-firefox@v3
 
       - name: Use browser
         if: steps.setup_browser.outputs.setup-action == 'actions/setup-edge@v3'
-        uses: actions/setup-edge@v3
+        uses: browser-actions/setup-edge@v3
