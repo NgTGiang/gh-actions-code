@@ -28,9 +28,8 @@ jobs:
           echo "::set-output name=browser-type::$browser_type"
         id: setup_browser
 
-      - name: Use browser
-        uses: actions/browser@v2
+      - name: Use custom browser action
+        uses: my-org/my-custom-action@v1
         with:
           browser-type: ${{ steps.setup_browser.outputs.browser-type }}
-          headless: true
-          start-url: https://example.com
+          other-input: 'value'
